@@ -4,17 +4,48 @@ function make_main_game_state( game )
 {
     function preload() {
         // Load an image and call it 'logo'.
+		game.load.image('cloud1','assets/cumulus-big1.png');
+		game.load.image('cloud2','assets/cumulus-big2.png');
+		game.load.image('cloud3','assets/cumulus-big3.png');
+		game.load.image('cloud4','assets/cumulus-huge.png');
         game.load.image( 'crystal', 'assets/crystal.png' );
 		game.load.image( 'particle', 'assets/rose.png' );
 		game.load.audio('sound', 'assets/music_jewels.ogg');
     }
     
     var bouncy;
+	var music;
+	var cloudKeys;
+	var cloudKey;
+	var clouds;
     
     function create() {
 		
-		var music = game.add.audio('sound');
+		// Only want world bounds on left and right
+		game.physics.setBoundsToWorld();
+		
+		// Background color
+		game.stage.backgroundColor = "#c2d6d7";
+		
+		// Background music
+		music = game.add.audio('sound');
 		music.loopFull();
+		
+		// Cloud keys
+		cloudKeys = ['cloud1','cloud2','cloud3','cloud4'];
+		
+		clouds = game.add.group();
+		clouds.enableBody = true;
+		
+		for (var x = 0; x < 10; x++)
+		{
+			cloudKey = game.rnd.pick(cloudKeys);
+			var cloud = clouds.create(this.game.world.randomX, -100, cloudKey);
+			cloud.checkWorldBounds = true;
+			cloud.events.onOutOfBounds.add(cloudOut, this);
+			cloud.body.velocity.y = 10 + Math.random() * 100;
+		}
+		
         // Create a sprite at the center of the screen using the 'logo' image.
         bouncy = game.add.sprite( game.world.centerX, game.world.centerY, 'crystal' );
         // Anchor the sprite at its center, as opposed to its top-left corner.
@@ -23,8 +54,6 @@ function make_main_game_state( game )
         
         // Turn on the arcade physics engine for this sprite.
         game.physics.enable( bouncy, Phaser.Physics.ARCADE );
-        // Make it bounce off of the world bounds.
-        bouncy.body.collideWorldBounds = true;
 		bouncy.inputEnabled = true;
 		bouncy.events.onInputDown.add(exploder, this);
         
@@ -52,6 +81,15 @@ function make_main_game_state( game )
 		emitter.gravity = 30;
 		emitter.start(true, 80000, null, 100);
 		bouncy.kill();
+	}
+	
+	function cloudOut(cloud) {
+		//  Move the cloud to the top of the screen again
+		cloud.reset(this.game.world.randomX, -100);
+
+		//  And give it a new random velocity
+		cloud.body.velocity.y = 10 + Math.random() * 100;
+	
 	}
     
     return { "preload": preload, "create": create, "update": update };
