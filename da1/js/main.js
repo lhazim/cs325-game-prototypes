@@ -18,6 +18,7 @@ function make_main_game_state( game )
 	var cloudKeys;
 	var cloudKey;
 	var clouds;
+	var crystals;
     
     function create() {
 		
@@ -46,16 +47,30 @@ function make_main_game_state( game )
 			cloud.body.velocity.y = 10 + Math.random() * 100;
 		}
 		
+		crystals = game.add.group();
+		crystals.enableBody = true;
+		crystals.physicsBodyType = Phaser.Physics.ARCADE;
+		crystals.inputEnableChildren = true;
+		
+		
+		for (var x = 0; x < 5; x++)
+		{
+			var crystal = crystals.create(this.game.world.randomX, -150, 'crystal');
+			crystal.checkWorldBounds = true;
+			crystal.events.onOutOfBounds.add(crystalOut, this);
+			crystal.body.velocity.y = 10 + Math.random() * 200;
+			crystal.events.onInputDown.add(exploder,this);
+		}
         // Create a sprite at the center of the screen using the 'logo' image.
-        bouncy = game.add.sprite( game.world.centerX, game.world.centerY, 'crystal' );
+        //	bouncy = game.add.sprite( game.world.centerX, game.world.centerY, 'crystal' );
         // Anchor the sprite at its center, as opposed to its top-left corner.
         // so it will be truly centered.
-        bouncy.anchor.setTo( 0.5, 0.5 );
+        //	bouncy.anchor.setTo( 0.5, 0.5 );
         
         // Turn on the arcade physics engine for this sprite.
-        game.physics.enable( bouncy, Phaser.Physics.ARCADE );
-		bouncy.inputEnabled = true;
-		bouncy.events.onInputDown.add(exploder, this);
+        //	game.physics.enable( bouncy, Phaser.Physics.ARCADE );
+		//	bouncy.inputEnabled = true;
+		//	bouncy.events.onInputDown.add(exploder, this);
         
         // Add some text using a CSS style.
         // Center it in X, and position its top 15 pixels from the top of the world.
@@ -73,14 +88,14 @@ function make_main_game_state( game )
         //bouncy.rotation = game.physics.arcade.accelerateToPointer( bouncy, game.input.activePointer, 500, 500, 500 );
     }
 	
-	function exploder(){
-		var emitter = this.game.add.emitter(game.world.centerX,game.world.centerY,100);
+	function exploder(crystal, pointer){
+		var emitter = this.game.add.emitter(pointer.x,pointer.y,100);
 		emitter.makeParticles('particle');
 		emitter.minParticleSpeed.setTo(-100, -100);
 		emitter.maxParticleSpeed.setTo(85, 85);
 		emitter.gravity = 30;
 		emitter.start(true, 80000, null, 100);
-		bouncy.kill();
+		crystal.kill();
 	}
 	
 	function cloudOut(cloud) {
@@ -89,6 +104,15 @@ function make_main_game_state( game )
 
 		//  And give it a new random velocity
 		cloud.body.velocity.y = 10 + Math.random() * 100;
+	
+	}
+	
+	function crystalOut(crystal) {
+		//  Move the cloud to the top of the screen again
+		crystal.reset(this.game.world.randomX, -150);
+
+		//  And give it a new random velocity
+		crystal.body.velocity.y = 10 + Math.random() * 200;
 	
 	}
     
