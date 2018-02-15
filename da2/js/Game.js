@@ -2,12 +2,14 @@
 
 GameStates.makeGame = function( game, shared ) {
     // Create your own variables.
-    var bouncy = null;
-	var bouncy2 = null;
-	var style  = null;
-	var text_look = null;
-	var text_take = null;
-	var text_use = null;
+    let bouncy = null;
+	let bouncy2 = null;
+	let style  = null;
+	let text_look = null;
+	let text_take = null;
+	let text_use = null;
+	let text_message = null;
+	let inventory = null; 
 	
 	function menuReset(){
 		text_look.x = 100;
@@ -19,12 +21,18 @@ GameStates.makeGame = function( game, shared ) {
 	}
 	
 	function look(object){
-		return function(){	
-			style = { font: "32px Courier", fill: "#00ff44" }; 
-			var text_lookAt = game.add.text(0,0,object.look, style);
-			text_lookAt.alignTo(object, Phaser.LEFT_TOP, 16);
-			menuReset();
-			game.time.events.add(Phaser.Timer.SECOND * 4, function(){text_lookAt.kill();}, this);
+		return function(){
+			if(object.interactions[0]){
+				text_message.text = object.look;
+				text_message.alignTo(object, Phaser.LEFT_TOP, 16);
+				menuReset();		
+			}
+			else{
+				text_message.text = "I can't do that right now.";
+				text_message.alignTo(object, Phaser.LEFT_TOP, 16);
+				menuReset();
+			}
+			//game.time.events.add(Phaser.Timer.SECOND * 10, function(){text_lookAt.x=-100;text_lookAt.y=-100;}, this);
 		};
 	}
 	
@@ -54,12 +62,14 @@ GameStates.makeGame = function( game, shared ) {
     
             //  Honestly, just about anything could go here. It's YOUR game after all. Eat your heart out!
             
-            // Creating interaction menu off screen 
+            // Creating interaction menu off screen
 			style = { font: "32px Courier", fill: "#00ff44" }; 
 			text_look = game.add.text(-100,-100,'Look',style);
 			text_take = game.add.text(-100,-100,'Take',style);
 			text_use = game.add.text(-100,-100,'Use',style); 
+			text_message = game.add.text(-100,-100,'', style);
 			
+			// Enabling input on interaction menu
 			text_look.inputEnabled = true;
 			text_take.inputEnabled = true;
 			text_use.inputEnabled = true; 
@@ -67,32 +77,22 @@ GameStates.makeGame = function( game, shared ) {
 			// Create sprites.
             bouncy = game.add.sprite( game.world.centerX, game.world.centerY, 'logo' );
 			bouncy2 = game.add.sprite(game.world.centerX,game.world.centerY,'logo2');
-            // Anchor the sprite at its center, as opposed to its top-left corner.
-            // so it will be truly centered.
+			
+            // Anchoring the sprites
             bouncy.anchor.setTo( 0.5, 0.5 );
 			bouncy.anchor.setTo(0.1,0.7);
             
-            // Turn on the arcade physics engine for this sprite.
-            game.physics.enable( bouncy, Phaser.Physics.ARCADE );
-			game.physics.enable( bouncy2, Phaser.Physics.ARCADE );
-            // Make it bounce off of the world bounds.
-            bouncy.body.collideWorldBounds = true;
-			bouncy2.body.collideWorldBounds = true;
-            
-            // Add some text using a CSS style.
-            // Center it in X, and position its top 15 pixels from the top of the world.
-            var style = { font: "25px Verdana", fill: "#9999ff", align: "center" };
-            var text = game.add.text( game.world.centerX, 15, "Build something amazing.", style );
-            text.anchor.setTo( 0.5, 0.0 );
-            
-            // When you click on the sprite, you go back to the MainMenu.
+            // Enabling input. Display the interaction menu when an object is clicked. 
             bouncy.inputEnabled = true;
             bouncy.events.onInputDown.add( displayMenu, this );
 			bouncy2.inputEnabled = true;
             bouncy2.events.onInputDown.add( displayMenu, this );
 			
+			// Setting the text that displays when a player looks at an objects. 
 			bouncy.look = 'This is logo1';
 			bouncy2.look = 'This is logo2';
+			bouncy.label = 'Bedsheets';
+			bouncy.interactions = [1,1,1];
         },
     
         update: function () {
