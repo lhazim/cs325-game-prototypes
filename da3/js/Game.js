@@ -58,8 +58,8 @@ GameStates.makeGame = function( game, shared ) {
             
 			world = game.add.group();
 			
-			background = game.add.sprite(400, 400, 'background');
-			background.scale.setTo(0.67,0.67);
+			background = game.add.sprite(300, 300, 'background');
+			background.scale.setTo(0.5,0.5);
 			background.anchor.setTo(0.5,0.5);
 			world.add(background);
 			
@@ -68,21 +68,23 @@ GameStates.makeGame = function( game, shared ) {
 			scoreboard = game.add.text(40,40,'Score: 0',style);
 			
 			// Create player
-			fainting_couch = game.add.sprite(game.world.centerX, 575, 'couch');
-			//fainting_couch.scale.setTo(0.67,0.67);
+			fainting_couch = game.add.sprite(game.world.centerX, 415, 'couch');
+			fainting_couch.scale.setTo(0.67,0.67);
 			fainting_couch.anchor.setTo( 0.5, 0.5 );
 			
 			// Enable physics
 			game.physics.arcade.enable(fainting_couch);
 			fainting_couch.body.collideWorldBounds = true; 
-			fainting_couch.speed = 200; 
+			fainting_couch.body.immovable = true; 
+			fainting_couch.speed = 175; 
 			
 			cursors = game.input.keyboard.createCursorKeys();
 			
-			ground = game.add.sprite(400,750,'ground');
+			ground = game.add.sprite(600,590,'ground');
 			ground.anchor.setTo(0.5,0.5);
 			
 			game.physics.arcade.enable(ground); 
+			ground.body.immovable = true; 
 			ground.body.onCollide = new Phaser.Signal();
 			ground.body.onCollide.add(death, this);
 			
@@ -96,44 +98,28 @@ GameStates.makeGame = function( game, shared ) {
 			
 			fainting_couch.body.onCollide = new Phaser.Signal();
 			fainting_couch.body.onCollide.add(caught, this);
-            
-            // Enabling input. Display the interaction menu when an object is clicked. 
-            //bouncy.inputEnabled = true;
-            //bouncy.events.onInputDown.add( displayMenu, this );
-			//bouncy2.inputEnabled = true;
-            //bouncy2.events.onInputDown.add( displayMenu, this );
-			
-			// Setting the text that displays when a player looks at an objects. 
-			//bouncy.look = 'This is logo1';
-			//bouncy2.look = 'This is logo2';
-			//bouncy.label = 'Bedsheets';
-			//bouncy.interactions = [1,1,1];
         },
     
         update: function () {
     
-            //  Honestly, just about anything could go here. It's YOUR game after all. Eat your heart out!
-            
-            // Accelerate the 'logo' sprite towards the cursor,
-            // accelerating at 500 pixels/second and moving no faster than 500 pixels/second
-            // in X or Y.
-            // This function returns the rotation angle that makes it visually match its
-            // new trajectory.
-            // bouncy.rotation = game.physics.arcade.accelerateToPointer( bouncy, game.input.activePointer, 500, 500, 500 );
+
 			
 			//  Reset the players velocity (movement)
 			fainting_couch.body.velocity.x = 0;
+			// Get current time
 			time_check = game.time.time;
+			// Check for collisions: couch and stars
+			// Check for collisions: ground and stars
 			game.physics.arcade.collide(fainting_couch, stars_blue);
 			game.physics.arcade.collide(fainting_couch, stars_gold); 
 			game.physics.arcade.collide(ground, stars_blue);
 			game.physics.arcade.collide(ground, stars_gold);
 			
-			if(time_check - last_spawn_blue > timer_blue && num_blue < 4){
+			if(time_check - last_spawn_blue > timer_blue && num_blue < 3){
 				timer_blue = game.rnd.normal()*8000; 
 				last_spawn_blue = time_check;
 				star = stars_blue.create(game.world.randomX, -300, 'blue');
-				star.scale.setTo(0.67,0.67);
+				star.scale.setTo(0.5,0.5);
 				star.body.velocity.y = 100 + Math.random() * 200;
 				star.value = 10;
 				star.color = 'b';
@@ -144,7 +130,7 @@ GameStates.makeGame = function( game, shared ) {
 				timer_gold = game.rnd.normal()*2000; 
 				last_spawn_gold = time_check;
 				star = stars_gold.create(game.world.randomX, -300, 'gold');
-				star.scale.setTo(0.67,0.67);
+				star.scale.setTo(0.5,0.5);
 				star.body.velocity.y = 80 + Math.random() * 200;
 				star.value = 5;
 				star.color = 'g';
