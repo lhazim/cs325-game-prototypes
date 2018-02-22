@@ -79,12 +79,12 @@ GameStates.makeGame = function( game, shared ) {
 			game.physics.arcade.enable(fainting_couch);
 			fainting_couch.body.collideWorldBounds = true; 
 			fainting_couch.body.immovable = true; 
-			fainting_couch.speed = 175; 
+			fainting_couch.speed = 190; 
 			
 			cursors = game.input.keyboard.createCursorKeys();
 			
-			ground = game.add.sprite(600,590,'ground');
-			ground.anchor.setTo(0.5,0.5);
+			ground = game.add.sprite(0,590,'ground');
+			ground.anchor.setTo(0,0);
 			
 			game.physics.arcade.enable(ground); 
 			ground.body.immovable = true; 
