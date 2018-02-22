@@ -56,6 +56,9 @@ GameStates.makeGame = function( game, shared ) {
     
         create: function () {
             
+			var music = game.add.audio('gameMusic');
+			music.play(); 
+			
 			world = game.add.group();
 			
 			background = game.add.sprite(300, 300, 'background');
