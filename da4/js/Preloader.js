@@ -22,12 +22,13 @@ GameStates.makePreloader = function( game ) {
 			background.scale.setTo(0.5,0.5);
     
             //	Load the game assets
-            game.load.audio('gameMusic', ['assets/otts.flac']);
+            game.load.audio('gameMusic', 'assets/otts.flac');
             //	+ lots of other required assets here
 			game.load.image( 'blue','assets/star_blue.png');
 			game.load.image('gold','assets/star_gold.png');
 			game.load.image('couch','assets/couch.png');
 			game.load.image('ground','assets/ground.png');
+			game.load.image('side','assets/side.png');
         },
     
         create: function () {

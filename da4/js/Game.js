@@ -2,15 +2,19 @@
 
 GameStates.makeGame = function( game, shared ) {
 	var cursors = null;
+	//sprites
 	var background = null;
 	var world = null; 
 	var ground = null;
+	var right_b = null; 
+	var left_b = null; 
     // blue stars: 10pts, 1.25 speed of gold stars
 	// gold stars: 5 pts
     var stars_blue = null;
 	var stars_gold = null;
 	var star = null; 
 	var fainting_couch = null;
+	var world_orientation = 0;
 	// score value & scoreboard text
 	var score = 0; 
 	var scoreboard = null;
@@ -28,7 +32,7 @@ GameStates.makeGame = function( game, shared ) {
 	var time_check = null; 
 	var last_spawn_blue = 0; 
 	var last_spawn_gold = 0;
-	//num of stars generated on the board
+	//num of stars spawned on the board
 	var num_blue = 0; 
 	var num_gold = 0;
 
@@ -55,25 +59,60 @@ GameStates.makeGame = function( game, shared ) {
 		lives--;
 		life.text = 'Lives: ' + lives; 
 	}
+	
+	function flip_cw(sprite1, sprite2){
+		world_orientation++; 
+		fainting_couch.angle = -90;
+		fainting_couch.x = 450;
+		fainting_couch.y = 450;
+	}
+	
+	function flip_ccw(sprite1, sprite2){
+		world_orientation--;
+		fainting_couch.angle = 90;
+		fainting_couch.x = 150;
+		fainting_couch.y = 450;
+	}
+	
+	function flip_ground(sprite1, sprite2){
+		if(world_orientation === 1){
+			world_orientation = 0;
+			fainting_couch.angle = 0;
+			fainting_couch.x = 450;
+			fainting_couch.y = 415;
+		}
+		if(world_orientation === -1){
+			world_orientation = 0;
+			fainting_couch.angle = 0;
+			fainting_couch.x = 150;
+			fainting_couch.y = 415;
+		}
+
+	}
     
     return {
     
         create: function () {
             
-			var music = game.add.audio('gameMusic');
-			music.play(); 
+			//var music = game.add.audio('gameMusic');
+			//music.play(); 
 			
 			world = game.add.group();
 			
 			background = game.add.sprite(300, 300, 'background');
 			background.scale.setTo(0.5,0.5);
 			background.anchor.setTo(0.5,0.5);
+			game.physics.arcade.enable(background);
+			background.body.moves = false; 
 			world.add(background);
 			
             // Display score in the top right
 			var style = { font: "32px Century Gothic", fill: "#fffeff" }; 
 			scoreboard = game.add.text(40,40,'Score: 0',style);
 			life = game.add.text(40,70,'Lives: 5', style); 
+			game.add.text(50, 500, '\u2191\n\u2193', style);
+			game.add.text(550, 500, '\u2191\n\u2193', style);
+			game.add.text(250, 560, '\u2190   \u2192', style);
 			
 			// Create player
 			fainting_couch = game.add.sprite(game.world.centerX, 415, 'couch');
@@ -82,54 +121,80 @@ GameStates.makeGame = function( game, shared ) {
 			
 			// Enable physics
 			game.physics.arcade.enable(fainting_couch);
-			fainting_couch.body.collideWorldBounds = true; 
+			//fainting_couch.body.collideWorldBounds = true; 
 			fainting_couch.body.immovable = true; 
-			fainting_couch.speed = 190; 
+			fainting_couch.speed = 250; 
 			
 			cursors = game.input.keyboard.createCursorKeys();
 			
-			ground = game.add.sprite(0,590,'ground');
-			ground.anchor.setTo(0,0);
+			ground = game.add.sprite(0,500,'ground');
+			right_b = game.add.sprite(598,0,'side');
+			left_b = game.add.sprite(1,0,'side');
 			
 			game.physics.arcade.enable(ground); 
 			ground.body.immovable = true; 
-			ground.body.onCollide = new Phaser.Signal();
-			ground.body.onCollide.add(death, this);
+			game.physics.arcade.enable(right_b); 
+			right_b.body.immovable = true; 
+			game.physics.arcade.enable(left_b); 
+			left_b.body.immovable = true; 
 			
 			stars_blue = game.add.group(); 
 			stars_blue.enableBody = true; 
 			stars_gold = game.add.group();
 			stars_gold.enableBody = true; 
+			world.add(stars_blue);
+			world.add(stars_gold);
 			
 			star = stars_gold.create(game.world.randomX, -150, 'gold');
 			star.value = 5; 
 			
-			fainting_couch.body.onCollide = new Phaser.Signal();
-			fainting_couch.body.onCollide.add(caught, this);
         },
     
         update: function () {
-    
-
 			
 			//  Reset the players velocity (movement)
 			fainting_couch.body.velocity.x = 0;
+			fainting_couch.body.velocity.y = 0;
 			// Get current time
 			time_check = game.time.time;
-			// Check for collisions: couch and stars
-			// Check for collisions: ground and stars
-			game.physics.arcade.collide(fainting_couch, stars_blue);
-			game.physics.arcade.collide(fainting_couch, stars_gold); 
-			game.physics.arcade.collide(ground, stars_blue);
-			game.physics.arcade.collide(ground, stars_gold);
-			
+
 			if (lives == 0){
 				// reset lives
 				// goto: GameOver
 				lives = 5;
+				num_blue = 0; 
+				num_gold = 0;
 				game.state.start('GameOver');
 			}
 			
+			// Check for collisions: couch and stars
+			// Check for collisions: ground and stars
+			if(world_orientation === 0){
+				game.physics.arcade.collide(fainting_couch, stars_blue, caught, null, this);
+				game.physics.arcade.collide(fainting_couch, stars_gold, caught, null, this); 
+				game.physics.arcade.collide(ground, stars_blue, death, null, this);
+				game.physics.arcade.collide(ground, stars_gold, death, null, this);
+				game.physics.arcade.collide(fainting_couch, right_b, flip_cw, null, this);
+				game.physics.arcade.collide(fainting_couch, left_b, flip_ccw, null, this);
+				
+			}
+			if(world_orientation === 1){
+				game.physics.arcade.collide(fainting_couch, stars_blue, caught, null, this);
+				game.physics.arcade.collide(fainting_couch, stars_gold, caught, null, this); 
+				game.physics.arcade.collide(ground, stars_blue, death, null, this);
+				game.physics.arcade.collide(ground, stars_gold, death, null, this);
+				game.physics.arcade.collide(fainting_couch, ground, flip_ground, null, this);
+			}
+			
+			if(world_orientation === -1){
+				game.physics.arcade.collide(fainting_couch, stars_blue, caught, null, this);
+				game.physics.arcade.collide(fainting_couch, stars_gold, caught, null, this); 
+				game.physics.arcade.collide(ground, stars_blue, death, null, this);
+				game.physics.arcade.collide(ground, stars_gold, death, null, this);
+				game.physics.arcade.collide(fainting_couch, ground, flip_ground, null, this);
+			}
+			
+
 			if(time_check - last_spawn_blue > timer_blue && num_blue < 3){
 				timer_blue = game.rnd.normal()*8000; 
 				last_spawn_blue = time_check;
@@ -151,21 +216,28 @@ GameStates.makeGame = function( game, shared ) {
 				star.color = 'g';
 				num_gold++;
 			}
-
-			if (cursors.left.isDown)
-			{
-				//  Move to the left
-				fainting_couch.body.velocity.x = -1*fainting_couch.speed;
+			if(world_orientation === 0){
+				if (cursors.left.isDown)
+				{
+					//  Move to the left
+					fainting_couch.body.velocity.x = -1*fainting_couch.speed;
+				}
+				else if (cursors.right.isDown)
+				{
+					//  Move to the right
+					fainting_couch.body.velocity.x = fainting_couch.speed;
+				}
 			}
-			else if (cursors.right.isDown)
-			{
-				//  Move to the right
-				fainting_couch.body.velocity.x = fainting_couch.speed;
+			if(world_orientation === 1 || world_orientation === -1){
+				if(cursors.up.isDown)
+				{
+					fainting_couch.body.velocity.y = -1*fainting_couch.speed; 
+				}
+				if(cursors.down.isDown)
+				{
+					fainting_couch.body.velocity.y = 1*fainting_couch.speed; 
+				}
 			}
-			//else if(cursors.down.isDown)
-			//{
-			//	world.angle = 90;
-			//}
         }
     };
 };
