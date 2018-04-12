@@ -1,0 +1,123 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="UTF-8" />
+	<link rel="stylesheet" type = "text/css" href = "assets/css/fontLoader.css">
+	<title>Phaser Basic Project Template</title>
+	<script src="js/phaser.min.js"></script>
+	<!-- Boot.js must come first since it creates the BasicGame object
+	that stores all the states. -->
+	<script src="js/Boot.js"></script>
+	<script src="js/MainMenu.js"></script>
+	<script src="js/CharSele.js"></script>
+	<script src="js/Level0.js"></script>
+	<!-- main.js must come last since it references the other ones. -->
+	<script src="js/main.js"></script>
+
+<style>
+body
+{
+    color: #777;
+    font-family: "Avenir", Verdana, sans-serif;
+}
+#readme
+{
+    margin-top: 10px;
+}
+</style>
+
+</head>
+<body>
+<div id="game"></div>
+<div id="readme">
+<h2>Untitled Space Thing</h2>
+
+<ul>
+<li><strong>Originality:</strong>
+I started from a basic space shooter and came up with dramatic elements and added character customization with 3 playable classes each with their own upgradable ability trees and corresponding character narratives. </li>
+
+<li><strong>Technical Merit:</strong>
+This is a shooter, so the core mechanics are relatively simple and straightforward. Eventually the classes will gain unique abilities as will the enemies.</li>
+
+<li><strong>Prototype Postmortem:</strong>
+What did you learn from this prototype? I know I don't have the implementation up in this prorotype yet, but this was mainly a practice in designing the classes and making sure the game is balanced across the classes and that the enemy is evenly matched.
+Other things I got some practice doing was developing a narrative with clear dramatic elements, and developing multiple intersecting narratives. I'm not sure if I'll get around to fully implementing the Story Mode, but from a design perspective it's done.
+What was the easiest or hardest part of making it? Working with text in Phaser is pretty annoying, as well as getting things to be where I want them to be.
+</li>
+
+<li><strong>Prototype Assets:</strong>
+Did you make your prototype assets from scratch? Did you borrow them? Cite your sources here.
+<ul>
+<li>Background: <a href ="https://opengameart.org/content/grid-hud">Grid HUD</a></li>
+<li>Font: <a href = "https://mozz.itch.io/space-madness">Space Madness</li>
+<li>Pop up screens: self-made</li>
+<li>Music: "loading" GooseNinja (<a href="https://gooseninja.itch.io/space-music-pack">Space Music Pack</a>).</li>
+</ul>
+</li>
+
+<li><strong>Prototype Closest Other Game:</strong>
+Which other game most closely resembles your game? If you are borrowing code from a Phaser Example, you must say so here. If you borrow code from elsewhere, you must say so here.
+<ul>
+<li>The code for this example is adapted from the <a href="https://github.com/photonstorm/phaser/tree/v2.6.2/resources/Project%20Templates/Basic">Phaser Basic Project Template</a></li>
+<li>Text buttons: Phaser example <a href="https://phaser.io/examples/v2/buttons/action-on-click">Action On Click</a></li>
+<li>Text popup: Phaser example <a href="https://phaser.io/examples/v2/input/button-open-popup">Button Open Pop Up</a></li>
+<li>Ultimately I invision combat to end up being a mixture of <a href="https://phaser.io/examples/v2/games/tanks">Tanks</a> and <a href ="https://phaser.io/examples/v2/games/invaders">Invaders</a></li>
+
+</ul>
+</li>
+
+<li><strong>High Concept:</strong>
+Untitled is a scifi shooter that follows three friends as they fight to save humanity from evil invading aliens, etc.
+</li>
+
+<li><strong>Mandated Variety:</strong>
+Keyboard input, low randomness (deterministic), could fit into the genre of overhead shooter and RPG, playstyles encouraged would be Craftsmen, Storyteller, and Competitor.
+State which input, randomness, genre, and play style you used in this prototype.
+</li>
+
+<li><strong>Prototype Goal:</strong>
+What game mechanic is this prototype evaluating? I'll call this prototype a design concept.
+</li>
+
+<li><strong>Player Experience Goals:</strong>
+What experience do you want players to have when playing your game? I want the narrative and characters to be engaging and the combat to be challenging enough to encourage players to craft upgrades and collect upgrade parts.
+</li>
+
+<li><strong>Gameplay:</strong>
+A paragraph describing the actions the player can perform, the system dynamics, and the core mechanic. Include a concise explanation of the prototype’s inputs and their expected effects (how to play). You can also describe game play that is not in the prototype. You may include mock-up images for parts of the game not in the prototype.
+There are three playable classes (characters) in the game, each have unique weapons and abilities that can be upgraded via collected salvage parts.
+<li><strong>The Soldier:</strong> This is the standard fighting unit. The ship is equipped with a shield and two guns. </li>
+<li><strong>The Sniper:</strong> I highly specialized unit. The ship is squipped with a deadly weapon that requires expert aim.</li>
+<li><strong>The Firebomb:</strong> Also a specialized unit. The ship is equipped with a canon-type weapon that deals damage over a blast radius.</li>
+The classes are penalized or given an advantage in the following stats: speed, firing rate, damage, shield strength, and health points. Alien ships also get progressively stronger as the player collects experience points and climbs the ranks. Alien ships initially come with the same gun equipped by the soldier weaker shields. Their abilities grow as yours do.
+Up, Down, Left, Right Arrow keys are used to move. Space bar to perform base attack. Upgraded abilities will be mapped to other keys. Players can also retreat from a battle by way of an on screen button.
+Ideally what I would like to implement is having all three classes going into each battle together, most classes are designed with a combat party in mind this would also open up an avenue for co-op play. However, I don't think it's feasible for to include it in the list of features I'm implmeneting here.
+</li>
+
+<li><strong>Strategies:</strong>
+What player strategies do you expect will be effective at playing this game?
+Knowing when you're outmatched and need to retreat. Also making sure to effectively utilize special abilities.
+</li>
+
+<li><strong>Story/Setting/Premise:</strong>
+A paragraph about the world your game is set in and who the characters are. What makes the game world and its occupants unique and interesting? Do the tokens represent something? If the game has a backstory, mention it here. If the game is abstract, then say so.
+Each of the classes corresponds to a character with the own story arc. The character's narratives intersect at various points and the characters play roles in each other's stories.
+<li><strong>The Soldier:</strong> This character is your archetypal <strong>hero</strong>. Think spunky, bleeding heart, and likeable. She's got a bright future ahead of her along the ranks of humanity's galactic army. As long as she keeps her head down and doesn't ask too many questions that is. </li>
+<li><strong>The Sniper:</strong> This is the <strong>engineer</strong>. Bookish, introverted, and dedicated. She's a genius at hacking alien technology salvaged from the battlefields. Huamnity's galactic army will owe many of their military achievements to technology she developed.</li>
+<li><strong>The Firebomb:</strong> This is the <strong>mad scientist</strong>. Confident, unnerving, and irreverent. Will also be responsible for many significant scientific breakthroughs. She makes everyone a little uneasy and likes to bring up controversial subjects just to watch people squirm.</li>
+How will the dramatic tension interact with the gameplay tension?
+The dramatic tension is meant to provide the player with a motivation for the battle sequences they're ultimately trying to win. The dramatic tension  provides context to the gameplay tension.
+</li>
+
+<li><strong>Target Audience:</strong>
+Anyway who wants to shoot some aliens in space with some cool guns.
+</li>
+
+<li><strong>Play Time:</strong>
+How long does your game take to play? Not playable right now.
+</li>
+
+</ul>
+</div>
+</body>
+</html>
