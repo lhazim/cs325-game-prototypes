@@ -37,6 +37,7 @@ GameStates.makeCharSele = function( game, shared ) {
 					shared.player.body.enable = true;
 					shared.player.body.collideWorldBounds = true;
 					game.music.stop();
+					game.music = null;
           game.state.start( 'Level0' );
     }
 

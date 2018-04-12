@@ -54,17 +54,17 @@ GameStates.makeLevel0 = function( game, shared ) {
 
 						cursors = game.input.keyboard.createCursorKeys();
 
-						var style = { font: "72px SpaceMadness", fill: "#fffeff", align: "center" };
+						// Play: music loop
+						music = this.add.audio('levelMusic');
+						music.loop = true;
+						music.play();
+
+						//var style = { font: "72px Press Start 2P", fill: "#fffeff", align: "center" };
 
 
         },
 
         update: function () {
-
-						// Play: music loop
-						game.music = this.add.audio('levelMusic');
-						game.music.loop = true;
-						//game.music.play();
 
 						game.physics.arcade.collide(bumpers, shared.player);
 						// collision between bumpers and enemies
