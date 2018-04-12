@@ -43,14 +43,13 @@ GameStates.makeCharSele = function( game, shared ) {
     function openFile() {
 
         // https://phaser.io/examples/v2/input/button-open-popup
-
         //  Create a tween that will pop-open the window
         tween = game.add.tween( this.popup.scale ).to( { x: 1, y: 1 }, 1000, Phaser.Easing.Elastic.Out, true );
         game.input.onDown.addOnce( closeFile, { popup: this.popup } );
         soldier.alpha = 0.2;
         sniper.alpha = 0.2;
         blaster.alpha = 0.2;
-				var style = { font: "64px SpaceMadness", fill: "#fffeff", align: "center" };
+				var style = { font: "42px Press Start 2P", fill: "#fffeff", align: "center" };
 				start = game.add.text( 295, 195, 'play→', style );
 				start.anchor.setTo( 1, 1 );
 				this.popup.addChild(start);
@@ -85,12 +84,12 @@ GameStates.makeCharSele = function( game, shared ) {
         create: function () {
 
 						background = game.add.sprite( 0, 0, 'menuBackground' );
-						var style = { font: "72px SpaceMadness", fill: "#fffeff", align: "center" };
+						var style = { font: "50px Press Start 2P", fill: "#fffeff", align: "center" };
 
 						// order matters here
-            soldier = game.add.text( 300, 150, 'The soldier', style );
-            sniper = game.add.text( 400, 500, 'The sniper', style );
-            blaster = game.add.text( 650, 300, 'The firebomb', style );
+            soldier = game.add.text( 300, 150, 'the soldier', style );
+            sniper = game.add.text( 400, 500, 'the sniper', style );
+            blaster = game.add.text( 620, 300, 'the firebomb', style );
             popup1 = game.add.sprite( 450, 300, 'soldierpopup' );
             popup2 = game.add.sprite( 450, 300, 'sniperpopup' );
             popup3 = game.add.sprite( 450, 300, 'blasterpopup' );

@@ -26,7 +26,7 @@ GameStates.makeMainMenu = function( game ) {
         create: function () {
 
 						background = game.add.sprite( 0, 0, 'menuBackground' );
-						var style = { font: "72px SpaceMadness", fill: "#fffeff", align: "center" };
+						var style = { font: "52px Press Start 2P", fill: "#fffeff", align: "center" };
 
 						// Title: Untitled Space Thing
 						title = game.add.text( 450, 150, 'untitled\nspace thing', style);

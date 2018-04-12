@@ -2,6 +2,22 @@
 
 var GameStates = {};
 
+//  The Google WebFont Loader will look for this object, so create it before loading the script.
+// https://phaser.io/examples/v2/text/google-webfonts
+var WebFontConfig = {
+
+    //  'active' means all requested fonts have finished loading
+    //  We set a 1 second delay before calling 'createText'.
+    //  For some reason if we don't the browser cannot render the text the first time it's created.
+    active: function() { game.time.events.add(Phaser.Timer.SECOND, createText, this); },
+
+    //  The Google Fonts we want to load (specify as many as you like in the array)
+    google: {
+      families: ['Press Start 2P']
+    }
+
+};
+
 GameStates.makeBoot = function( game ) {
     return {
         init: function () {
@@ -47,15 +63,14 @@ GameStates.makeBoot = function( game ) {
             // bumpers
             game.load.image( 'vbumper', 'assets/vertical_bumper.png' );
             game.load.image( 'hbumper', 'assets/horizontal_bumper.png' );
+
+            //  Load the Google WebFont Loader script
+            // https://phaser.io/examples/v2/text/google-webfonts
+            game.load.script('webfont', '//ajax.googleapis.com/ajax/libs/webfont/1.4.7/webfont.js');
         },
 
         create: function () {
 
-            // https://mozz.itch.io/space-madness
-            // http://www.html5gamedevs.com/topic/28424-solved-loading-custom-fonts-and-displaying-cyrillicfrenchturkish-characters/
-            // HACK TO PRELOAD A CUSTOM FONT
-	           this.game.add.text( 0, 0, "hack", { font:"1px SpaceMadness", fill:"#FFFFFF" } );
-             this.game.add.text( 0, 0, "hack2", { font:"1px SpaceMadness", fill:"#FFFFFF" } );
             //  Go to: main menu
             game.state.start( 'MainMenu' );
 
