@@ -48,6 +48,7 @@ GameStates.makeBoot = function( game ) {
 
             // https://gooseninja.itch.io/space-music-pack
             game.load.audio( 'menuMusic', ['assets/loading.wav'] );
+            game.load.audio( 'levelMusic', ['assets/battle.wav'] );
 
             // pop-ups made by me
             game.load.image( 'soldierpopup', 'assets/soldierpopup.png' );

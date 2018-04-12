@@ -61,6 +61,11 @@ GameStates.makeLevel0 = function( game, shared ) {
 
         update: function () {
 
+						// Play: music loop
+						game.music = this.add.audio('levelMusic');
+						game.music.loop = true;
+						game.music.play();
+
 						game.physics.arcade.collide(bumpers, shared.player);
 						// collision between bumpers and enemies
 						// collision between players and enemies
